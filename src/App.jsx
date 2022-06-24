@@ -38,8 +38,9 @@ function App() {
 
   const [height, setHeight] = useState();
   const [weight, setWeight] = useState();
-  const [imc, setImc] = useState();
+  const [imc, setImc] = useState(0);
   const [showingCards, setShowingCards] = useState(allCards);
+  const [showingResult, setShowingResult] = useState(false);
 
   const onClickCalcularButton = () => {
     const imc = weight / height ** 2;
@@ -55,13 +56,13 @@ function App() {
       cardName = "Obesidade"
     }
     const resultCard = allCards.filter(card => card.name === cardName);
-    setShowingCards(resultCard); 
+    setShowingCards(resultCard);
+    setShowingResult(true); 
   };
 
   const onCLickReturn = () => {
     setShowingCards(allCards);
-    setHeight(0);
-    setWeight(0);
+    setShowingResult(false);
   }
 
   return (
@@ -80,12 +81,14 @@ function App() {
           type="number"
           value={height}
           onChange={(e) => setHeight(e.target.value)}
+          disabled={showingResult}
         />
         <Input
           placeholder="Digite seu peso. Ex: 85 (em kg)"
           type="number"
           value={weight}
           onChange={(e) => setWeight(e.target.value)}
+          disabled={showingResult}
         />
         <Button className="button-calcular" onClick={onClickCalcularButton}>
           Calcular
@@ -103,7 +106,7 @@ function App() {
             bgColor1={result.bgColor1}
             bgColor2={result.bgColor2}
             key={result.name}
-            isResult={showingCards.length == 1 ? true : false}
+            isResult={showingResult}
             onCLickReturn={onCLickReturn}
             imc={imc.toFixed(2)}
           />
