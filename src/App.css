@@ -1,0 +1,32 @@
+.container {
+    max-width: 800px;
+    margin: auto;
+    margin-top: 50px;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 80px;
+}
+
+.get-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.result {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-self: center;
+    gap: 10px;
+}
+
+.logo {
+    width: 100px;
+}
+
+.button-calcular {
+    margin-top: 45px;
+    border-radius: 10px;
+    background-color: rgb(49, 49, 141);
+    color: #fff;
+}
