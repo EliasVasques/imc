@@ -5,12 +5,64 @@ import { StyledCard } from "./components/Card/Card.style";
 import { Button } from "./components/Button/Button";
 
 function App() {
-  const results = [
-    { name: "Magreza", bgColor1: "#909EA7", bgColor2: "#808B95", msg: "IMC está entre 0 e 18.5", thumbUp: false },
-    { name: "Normal", bgColor1: "#02A860", bgColor2: "#049456", msg: "IMC está entre 18.5 e 24.9", thumbUp: true },
-    { name: "Sobrepeso", bgColor1: "#E2AC30", bgColor2: "#C79826",  msg: "IMC está entre 24.9 e 30", thumbUp: false },
-    { name: "Obesidade", bgColor1: "#C13735", bgColor2: "#A93130",  msg: "IMC está entre 30 e 99", thumbUp: false },
+  const allCards = [
+    {
+      name: "Magreza",
+      bgColor1: "#909EA7",
+      bgColor2: "#808B95",
+      msg: "IMC está entre 0 e 18.5",
+      thumbUp: false,
+    },
+    {
+      name: "Normal",
+      bgColor1: "#02A860",
+      bgColor2: "#049456",
+      msg: "IMC está entre 18.5 e 24.9",
+      thumbUp: true,
+    },
+    {
+      name: "Sobrepeso",
+      bgColor1: "#E2AC30",
+      bgColor2: "#C79826",
+      msg: "IMC está entre 24.9 e 30",
+      thumbUp: false,
+    },
+    {
+      name: "Obesidade",
+      bgColor1: "#C13735",
+      bgColor2: "#A93130",
+      msg: "IMC está entre 30 e 99",
+      thumbUp: false,
+    },
   ];
+
+  const [height, setHeight] = useState();
+  const [weight, setWeight] = useState();
+  const [imc, setImc] = useState();
+  const [showingCards, setShowingCards] = useState(allCards);
+
+  const onClickCalcularButton = () => {
+    const imc = weight / height ** 2;
+    setImc(imc);
+    let cardName = "";
+    if(imc < 18.5) {
+      cardName = "Magreza"
+    } else if(imc < 24.9) {
+      cardName = "Normal"
+    } else if(imc < 30) {
+      cardName = "Sobrepeso"
+    } else if(imc < 99) {
+      cardName = "Obesidade"
+    }
+    const resultCard = allCards.filter(card => card.name === cardName);
+    setShowingCards(resultCard); 
+  };
+
+  const onCLickReturn = () => {
+    setShowingCards(allCards);
+    setHeight(0);
+    setWeight(0);
+  }
 
   return (
     <div className="container">
@@ -23,15 +75,40 @@ function App() {
           dolorem, eius placeat voluptatem sunt modi, blanditiis dolores
           consequuntur veniam voluptatibus sequi dignissimos.
         </p>
-        <Input placeholder="Digite sua altura. Ex: 1.5 (em metros)" type="number" />
-        <Input placeholder="Digite seu peso. Ex: 85 (em kg)" type="number" />
-        <Button className="button-calcular">Calcular</Button>
+        <Input
+          placeholder="Digite sua altura. Ex: 1.5 (em metros)"
+          type="number"
+          value={height}
+          onChange={(e) => setHeight(e.target.value)}
+        />
+        <Input
+          placeholder="Digite seu peso. Ex: 85 (em kg)"
+          type="number"
+          value={weight}
+          onChange={(e) => setWeight(e.target.value)}
+        />
+        <Button className="button-calcular" onClick={onClickCalcularButton}>
+          Calcular
+        </Button>
       </div>
 
       <div className="result">
-        {results.map((result) => (
-          <StyledCard name={result.name} msg={result.msg} bgColor1={result.bgColor1} bgColor2={result.bgColor2}thumbUp={result.thumbUp} key={result.name} />
-        ))}
+        {
+        showingCards.map((result) => (
+          <StyledCard
+            className='card'
+            thumbSrc={result.thumbUp ? "src/assets/img/up.png" : "src/assets/img/down.png"}
+            name={result.name}
+            msg={result.msg}
+            bgColor1={result.bgColor1}
+            bgColor2={result.bgColor2}
+            key={result.name}
+            isResult={showingCards.length == 1 ? true : false}
+            onCLickReturn={onCLickReturn}
+            imc={imc.toFixed(2)}
+          />
+        ))
+        }
       </div>
     </div>
   );
